@@ -1,0 +1,213 @@
+
+{% extends 'base.html' %}
+{% block body %}
+  <br>
+  <div class="container">
+    <nav class="navbar navbar-inverse">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>                        
+          </button>
+          <a class="navbar-brand" href="/">Sales Dashboard</a>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+          <ul class="nav navbar-nav">
+            <li><a href="sales/">Sales</a></li>
+            <li><a href="analytics/">Quantity Analysis</a></li>
+            <li><a href="weekly/">Weekly</a></li>
+            <li><a href="netSale/">Net Sale</a></li>
+            <li><a href="opalData/">Opal Export</a></li>
+            <li><a href="import/">Import</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="{% url 'logout_view' %}"><span class="glyphicon glyphicon-off"></span></a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+    <br>
+    <center>
+      
+        <div class="container">
+            <form method="POST">
+                {% csrf_token %}
+                <b>From : &nbsp;</b> <input type="date" name="startdate" />
+                <b>To : &nbsp;</b><input type="date" name="todate" />
+                <input type="submit" name="search">
+            </form>
+            <hr>
+        </div>
+      </center>
+
+    {% if show %}
+      <div class='container'><h1>Channels -:</h1></div>
+      <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <p><h3>Wayfair:</h3><h4>{{dollar}}&nbsp;{{wayfair}}</h4></p>
+            </div>
+            <div class="col-md-4">
+              <h3>Overstock:</h3><h4>{{dollar}}&nbsp;{{overstock}}</h4>
+            </div>
+            <div class="col-md-4">
+              <h3>Amazon vendor DS:</h3><h4>{{dollar}}&nbsp;{{amazonDS}}</h4>
+            </div>
+          </div>
+      </div>
+      <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <h3>Home depot:</h3><h4>{{dollar}}&nbsp;{{homeDepot}}</h4>
+            </div>
+            <div class="col-md-4">
+              <h3>Vir Venture:</h3><h4>{{dollar}}&nbsp;{{virVenture}}</h4>
+            </div>
+            <div class="col-md-4">
+              <h3>Target.com:</h3><h4>{{dollar}}&nbsp;{{target}}</h4>
+            </div>
+          </div>
+      </div>
+      <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <h3>Lowes:</h3><h4>{{dollar}}&nbsp;{{lowes}}</h4>
+            </div>
+            <div class="col-md-4">
+            <h3>Walmart:</h3><h4>{{dollar}}&nbsp;{{walmart}}</h4>
+            </div>
+            <div class="col-md-4">
+              <h3>Doba:</h3><h4>{{dollar}}&nbsp;{{doba}}</h4>
+            </div>
+          </div>
+      </div>
+      <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <h3>Casagear:</h3><h4>{{dollar}}&nbsp;{{casagear}}</h4>
+            </div>
+            <div class="col-md-4">
+              <h3>Open Sky:</h3><h4>{{dollar}}&nbsp;{{opensky}}</h4>
+            </div>
+            <div class="col-md-4">
+              <h3>Amazon FBM:</h3><h4>{{dollar}}&nbsp;{{amazonFBM}}</h4>
+            </div>
+          </div>
+      </div>
+      <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <h3>Benzara Wholesale:</h3><h4>{{dollar}}&nbsp;{{benzara}}</h4>
+            </div>
+            <div class="col-md-4">
+              <h3>Bed Bath & Beyond:</h3><h4>{{dollar}}&nbsp;{{bed}}</h4>
+            </div>
+            <div class="col-md-4">
+              <h3>Uber Bazaar:</h3><h4>{{dollar}}&nbsp;{{uberBazar}}</h4>
+            </div>
+          </div>
+      </div>
+      <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <h3>Cymax:</h3><h4>{{dollar}}&nbsp;{{cymax}}</h4>
+            </div>
+            <div class="col-md-4">
+              <h3>Hayneedle:</h3><h4>{{dollar}}&nbsp;{{hayneedle}}</h4>
+            </div>
+            <div class="col-md-4">
+              <h3>Amazon Vendor US:</h3><h4>{{dollar}}&nbsp;{{amazonUS}}</h4>
+            </div>
+          </div>
+      </div>
+      <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <h3>OJ Commerce:</h3><h4>{{dollar}}&nbsp;{{ojCommer}}</h4>
+            </div>
+            <div class="col-md-4">
+              <h3>Ebay:</h3><h4>{{dollar}}&nbsp;{{ebay}}</h4>
+            </div>
+            <div class="col-md-4">
+              <h3>Unbeatable:</h3><h4>{{dollar}}&nbsp;{{unbeatbale}}</h4>
+            </div>
+          </div>
+      </div>
+      <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <h3>Kroger:</h3><h4>{{dollar}}&nbsp;{{kroger}}</h4>
+            </div>
+            <div class="col-md-4">
+              <h3>Amazon Vendor CA:</h3><h4>{{dollar}}&nbsp;{{amazonCA}}</h4>
+            </div>
+            <div class="col-md-4">
+              <h3>Pier 1:</h3><h4>{{dollar}}&nbsp;{{pier1}}</h4>
+            </div>
+          </div>
+      </div>
+      <br>
+      <br>
+      <div class="container">
+        <div class="row">
+          <div class='col-sm'>
+            <a href="/export" <button class="btn btn-default btn-lg" 
+            type="button">
+            <strong>Export Complete Data</strong>
+          </button></a>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="container">
+          <div class="row">
+              <div class="col-sm">
+                  <div class="table-responsive text-nowrap">
+                      <!-- <div style="overflow-x:auto;"> -->
+                      <table class="table table-striped">
+                          <thead>
+                              <tr>
+                                  <th scope="col" class="th-lg">Date</th>
+                                  <th scope="col">Channel Name</th>
+                                  <th scope="col">Sales Order ID</th>
+                                  <th scope="col">Ship to Name</th>
+                                  <th scope="col">SKU</th>
+                                  <th scope="col">Normal SKU</th>
+                                  <th scope="col">Vendor</th>
+                                  <th scope="col">Quantity</th>
+                                  <th scope="col">Line Total</th>
+                                  <th scope="col">Channel Order Id</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+
+                              {% for result in data %}
+                              <tr>
+                                  <td>{{result.date}}</td>
+                                  <td>{{result.sales_channel}}</td>
+                                  <td>{{result.sales_order_id}}</td>
+                                  <td>{{result.ship_to_name}}</td>
+                                  <td>{{result.sku}}</td>
+                                  <td>{{result.normal_sku}}</td>
+                                  <td>{{result.vendor}}</td>
+                                  <td>{{result.quantity}}</td>
+                                  <td>{{result.line_total}}</td>
+                                  <td>{{result.channel_order_id}}</td>
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+    {% else %}
+    <div class="container">
+
+    </div>
+    {% endif %}
+    {% endblock %}

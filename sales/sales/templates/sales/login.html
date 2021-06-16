@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block body %}
+<br>
+<br>
+<br>
+<div class="row">
+    <div class="col-sm-4">
+    </div>
+    <div class="col-sm-4">
+      <center><img src="https://drive.google.com/uc?export=view&id=1WDBTuMXEri5lDJTwH0JFBY4_CUZ6f2WS" alt="logo"></center>
+      <center><h1>Welcome to Sales Dashboard</h1>
+      <h3><p>You can log in here!!</p></h3>
+      <br>
+      <form method="post" action="{% url 'login_view' %}">
+          {% csrf_token %}
+          <center>{{ form|crispy }}</center>
+          <br>
+          <br>
+          <br>
+          <center>
+          <button type="submit" class="btn btn-success">LogIn</button>
+          </center>
+      </form>
+      <br>
+      <br>
+      <hr>
+    </div>
+    <div class="col-sm-4  ">
+    </div>
+
+</div>
+
+{% endblock %} 
