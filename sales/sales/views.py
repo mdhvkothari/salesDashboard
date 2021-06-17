@@ -11,7 +11,6 @@ from django.db.models import Sum
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout,login
-from sheets.templatetags.sheets import Sheet
 
 downloadData = ""
 fileName = "Data"
