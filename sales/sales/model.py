@@ -45,3 +45,11 @@ class TotalOpalData(models.Model):
     class Meta:
         managed = False
         db_table = 'total_opal_data'
+
+class NonMover(models.Model):
+    sku = models.TextField(db_column='SKU', blank=True, null=True)  # Field name made lowercase.
+    masked_sku = models.TextField(db_column='Masked SKU', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
+
+    class Meta:
+        managed = False
+        db_table = 'non_mover'

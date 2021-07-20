@@ -1947,3 +1947,6 @@ def opalTabExport(request):
     return response
 
 
+def non_mover(request):
+    print("yes")
+    return render(request,'sales/nonmover.html')
