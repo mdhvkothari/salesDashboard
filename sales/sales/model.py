@@ -47,6 +47,7 @@ class TotalOpalData(models.Model):
         db_table = 'total_opal_data'
 
 class NonMover(models.Model):
+    id = models.BigIntegerField(db_column='Id', blank=True, null=False,primary_key=True)  # Field name made lowercase.
     sku = models.TextField(db_column='SKU', blank=True, null=True)  # Field name made lowercase.
     masked_sku = models.TextField(db_column='Masked SKU', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters.
 

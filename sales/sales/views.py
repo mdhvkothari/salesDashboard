@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from sales.model import TotalSalesData, TotalOpalData
+from sales.model import TotalSalesData, TotalOpalData, NonMover
 from django.http import JsonResponse,HttpResponse
 from datetime import datetime, timedelta
 from django.db import connection
@@ -1948,5 +1948,34 @@ def opalTabExport(request):
 
 
 def non_mover(request):
-    print("yes")
+    if request.method == 'POST':
+        date = request.POST.get('startdate')
+        channel = request.POST.get('channelName')
+        time = request.POST.get('time')
+        from_date = datetime.strptime(date, '%Y-%m-%d')
+    
+        dateArr = []
+        dateArr.append(from_date)
+        for i in range(0,4):
+            b = from_date - timedelta(days=int(time))
+            dateArr.append(b.date())
+            from_date = b
+
+        q1 = TotalOpalData.objects.filter(orderdate__range=(str(dateArr[1]),str(dateArr[0].date())))
+        q2 = TotalOpalData.objects.filter(orderdate__range=(str(dateArr[2]),str(dateArr[1])))
+        q3 = TotalOpalData.objects.filter(orderdate__range=(str(dateArr[3]),str(dateArr[2])))
+
+        nonmover = NonMover.objects.all()
+        
+        test = TotalOpalData.objects.all().values_list('itemname').intersection(NonMover.objects.all().values_list('sku'))
+
+        print(test)
+
+        
+
+
+
+
+        return render(request,'sales/nonmover.html')
+
     return render(request,'sales/nonmover.html')
