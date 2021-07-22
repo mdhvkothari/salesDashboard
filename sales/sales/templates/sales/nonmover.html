@@ -47,7 +47,7 @@
                   <option value="None">All Channels</option>
                   <option value="Wayfair">Wayfair</option>
                   <option value="Casagear">Casagear</option>
-                  <option value="Casagear">Morecommerce</option>
+                  <option value="Morecommerce">Morecommerce</option>
                   <option value="Overstock">Overstock</option>
                   <option value="Manhattan Lane -Amazon SC">Manhattan Lane -Amazon SC</option>
                 </select>
@@ -61,6 +61,7 @@
         <div class="container">
           <div class="row">
             <center><h3><mark>{{text}}</mark></h3></center>
+            <br>
             <br>
             <div class="col-sm-3">
               <table class="table table-striped">
@@ -146,13 +147,13 @@
               <div class="col-md-12">
                 <center><h3>{{ date1 }}&nbsp;-&nbsp;{{ date2 }}</h3></center>
                       <div id="container" style="width: 100%;">
-                          <canvas id="analytics" data-url="{% url 'analytics' %}"></canvas>
+                          <canvas id="non_mover_export" data-url="{% url 'non_mover_export' %}"></canvas>
                         </div>
                         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
                         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
                         <script>
                           $(function () {
-                            var $populationChart = $("#analytics");
+                            var $populationChart = $("#non_mover_export");
                             $.ajax({
                               url: $populationChart.data("url"),
                               success: function () {
@@ -197,13 +198,13 @@
                 <div class="col-md-12">
                   <center><h3>{{ date2 }}&nbsp;-&nbsp;{{ date3 }}</h3></center>
                         <div id="container" style="width: 100%;">
-                            <canvas id="analytics1" data-url="{% url 'analytics' %}"></canvas>
+                            <canvas id="non_mover_export1" data-url="{% url 'non_mover_export' %}"></canvas>
                           </div>
                           <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
                           <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
                           <script>
                             $(function () {
-                              var $populationChart = $("#analytics1");
+                              var $populationChart = $("#non_mover_export1");
                               $.ajax({
                                 url: $populationChart.data("url"),
                                 success: function () {
@@ -248,13 +249,13 @@
                   <div class="col-md-12">
                     <center><h3>{{ date3 }}&nbsp;-&nbsp;{{ date4 }}</h3></center>
                           <div id="container" style="width: 100%;">
-                              <canvas id="analytics2" data-url="{% url 'analytics' %}"></canvas>
+                              <canvas id="non_mover_export2" data-url="{% url 'non_mover_export' %}"></canvas>
                             </div>
                             <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
                             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
                             <script>
                               $(function () {
-                                var $populationChart = $("#analytics2");
+                                var $populationChart = $("#non_mover_export2");
                                 $.ajax({
                                   url: $populationChart.data("url"),
                                   success: function () {
@@ -296,6 +297,8 @@
         <div class="container">
           <div class="row">
             <center><h3><mark>{{channel}}&nbsp;{{text}}</mark></h3></center>
+            <br>
+            <center><h4>Total Quantity Moved:-</h4>&nbsp;<mark>{{finalquantity}}</mark>&nbsp;&nbsp;<h4>Total Sales:-</h4>&nbsp;<mark>{{dollar}}{{finalSales  }}</mark></center>
             <br>
             <div class="col-sm-3">
               <table class="table table-striped">
@@ -400,13 +403,13 @@
               <div class="col-md-12">
                 <center><h3>{{ date1 }}&nbsp;-&nbsp;{{ date2 }}</h3></center>
                       <div id="container" style="width: 100%;">
-                          <canvas id="analytics3" data-url="{% url 'analytics' %}"></canvas>
+                          <canvas id="non_mover_export3" data-url="{% url 'non_mover_export' %}"></canvas>
                         </div>
                         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
                         <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
                         <script>
                           $(function () {
-                            var $populationChart = $("#analytics3");
+                            var $populationChart = $("#non_mover_export3");
                             $.ajax({
                               url: $populationChart.data("url"),
                               success: function () {
@@ -418,7 +421,7 @@
                                   data: {
                                     labels: {{ vendor|safe }},
                                     datasets: [{
-                                      label: 'Vendor Line Total',
+                                      label: 'SKU Line Total',
                                       backgroundColor: '#6fae3f',
                                       data: {{ gv1|safe }},
                                     }]          
@@ -451,13 +454,13 @@
                 <div class="col-md-12">
                   <center><h3>{{ date2 }}&nbsp;-&nbsp;{{ date3 }}</h3></center>
                         <div id="container" style="width: 100%;">
-                            <canvas id="analytics4" data-url="{% url 'analytics' %}"></canvas>
+                            <canvas id="non_mover_export4" data-url="{% url 'non_mover_export' %}"></canvas>
                           </div>
                           <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
                           <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
                           <script>
                             $(function () {
-                              var $populationChart = $("#analytics4");
+                              var $populationChart = $("#non_mover_export4");
                               $.ajax({
                                 url: $populationChart.data("url"),
                                 success: function () {
@@ -469,7 +472,7 @@
                                     data: {
                                       labels: {{ vendor|safe }},
                                       datasets: [{
-                                        label: 'Vendor Line Total',
+                                        label: 'SKU Line Total',
                                         backgroundColor: '#6fae3f',
                                         data: {{ gv2|safe }},
                                       }]          
@@ -502,13 +505,13 @@
                   <div class="col-md-12">
                     <center><h3>{{ date3 }}&nbsp;-&nbsp;{{ date4 }}</h3></center>
                           <div id="container" style="width: 100%;">
-                              <canvas id="analytics5" data-url="{% url 'analytics' %}"></canvas>
+                              <canvas id="non_mover_export5" data-url="{% url 'non_mover_export' %}"></canvas>
                             </div>
                             <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
                             <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
                             <script>
                               $(function () {
-                                var $populationChart = $("#analytics5");
+                                var $populationChart = $("#non_mover_export5");
                                 $.ajax({
                                   url: $populationChart.data("url"),
                                   success: function () {
@@ -520,7 +523,7 @@
                                       data: {
                                         labels: {{ vendor|safe }},
                                         datasets: [{
-                                          label: 'Vendor Line Total',
+                                          label: 'SKU Line Total',
                                           backgroundColor: '#6fae3f',
                                           data: {{ gv3|safe }},
                                         }]          

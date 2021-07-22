@@ -32,7 +32,7 @@ class TotalOpalData(models.Model):
     orderid = models.FloatField(db_column='orderId', blank=True, null=True)  # Field name made lowercase.
     customerreferencenumber = models.TextField(db_column='customerReferenceNumber', blank=True, null=True)  # Field name made lowercase.
     invoicenumber = models.FloatField(db_column='invoiceNumber', blank=True, null=True)  # Field name made lowercase.
-    itemname = models.TextField(db_column='itemName', blank=True, null=True)  # Field name made lowercase.
+    itemname  = models.TextField(db_column='itemName', blank=True, null=True)  # Field name made lowercase.
     quantity = models.FloatField(blank=True, null=True)
     price = models.FloatField(blank=True, null=True)
     amount = models.FloatField(blank=True, null=True)

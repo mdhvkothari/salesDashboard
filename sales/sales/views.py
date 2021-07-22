@@ -1950,7 +1950,7 @@ def opalTabExport(request):
 
 downloadnon_moverData = ""
 fileName_non_mover = "Data"
-
+@login_required(login_url='login_view')
 def non_mover(request):
 
     if request.method == 'POST':
@@ -2087,13 +2087,183 @@ def non_mover(request):
                 'date1':f1,'date2':f2,'date3':f3,'date4':f4
             })
 
-        # elif channelName!='None':
+        elif channelName!='None':
+
+            finalResult1 = inter1.filter(customername__contains= channelName)
+            finalResult2 = inter2.filter(customername__contains= channelName)
+            finalResult3 = inter3.filter(customername__contains= channelName)
+            
+
+
+
+            # print("yes1")
+            v1 = {}
+            v2 = {}
+            v3 = {}
+
+
+            p1 = {}
+            p2 = {}
+            p3 = {}
+            
+
+
+            for i in range(0,len(finalResult1)):
+                if finalResult1[i].itemname in v1:
+                    v1[finalResult1[i].itemname] += finalResult1[i].quantity
+                    p1[finalResult1[i].itemname] += finalResult1[i].amount
+                else:
+                    v1[finalResult1[i].itemname] = 0
+                    p1[finalResult1[i].itemname] = 0
+
+            for i in range(0,len(finalResult2)):
+                if finalResult2[i].itemname in v2:
+                    v2[finalResult2[i].itemname] += finalResult2[i].quantity
+                    p2[finalResult2[i].itemname] += finalResult2[i].amount
+                else:
+                    v2[finalResult2[i].itemname] = 0
+                    p2[finalResult2[i].itemname] = 0
+            for i in range(0,len(finalResult3)):
+                if finalResult3[i].itemname in v3:
+                    v3[finalResult3[i].itemname] += finalResult3[i].quantity
+                    p3[finalResult3[i].itemname] += finalResult3[i].amount
+                else:
+                    v3[finalResult3[i].itemname] = 0
+                    p3[finalResult3[i].itemname] = 0
+
+            
+
+            fsd1 = {}
+            fsd2 = {}
+            fsd3 = {}
+
+            isd1 = sorted(v1.items(), key=lambda item: item[1],reverse = True)
+            isd2 = sorted(v2.items(), key=lambda item: item[1],reverse = True)
+            isd3 = sorted(v3.items(), key=lambda item: item[1],reverse = True)
+
+            for i in range(0,len(isd1)):
+                fsd1[isd1[i][0]] = isd1[i][1]
+            for i in range(0,len(isd2)):
+                fsd2[isd2[i][0]] = isd2[i][1]
+            for i in range(0,len(isd3)):
+                fsd3[isd3[i][0]] = isd3[i][1]
+
+            V1 = list(fsd1.keys())
+            L1 = list(fsd1.values())
+
+            V2 = list(fsd2.keys())
+            L2 = list(fsd2.values())
+
+            V3 = list(fsd3.keys())
+            L3 = list(fsd3.values())
+
+                   
+
+
+            df1 = {'sku':V1,'quantity1':L1}
+            df2 = {'sku':V2,'quantity2':L2}
+            df3 = {'sku':V3,'quantity3':L3}
+
+
+            df1 = pd.DataFrame(df1)
+            df2 = pd.DataFrame(df2)
+            df3 = pd.DataFrame(df3)
+
+            df = reduce(lambda x,y: pd.merge(x,y, on='sku', how='outer'), [df1, df2, df3])
+            df = df.replace(np.nan,0)
+
+            #for price one
+            s1 = list(p1.keys())
+            sp1 = list(p1.values())
+            s2 = list(p2.keys())
+            sp2 = list(p2.values())
+            s3 = list(p3.keys())
+            sp3 = list(p3.values())
+
+            pdf1 = {'sku':s1,'price1':sp1}
+            pdf2 = {'sku':s2,'price2':sp2}
+            pdf3 = {'sku':s3,'price3':sp3}
+
+            pdf1 = pd.DataFrame(pdf1)
+            pdf2 = pd.DataFrame(pdf2)
+            pdf3 = pd.DataFrame(pdf3)
+
+
+            # print("yes1")
+            pdf = reduce(lambda x,y: pd.merge(x,y, on='sku', how='outer'), [pdf1, pdf2, pdf3])
+            pdf = pdf.replace(np.nan,0) 
+
+            # print(pdf)  
+
+            finalDf = pd.merge(df,pdf,on='sku',how='outer')
+
+            q1 = list(finalDf['quantity1'])[0:100]
+            q2 = list(finalDf['quantity2'])[0:100]
+            q3 = list(finalDf['quantity3'])[0:100]
+            totalquan1 = sum(q1)
+            totalquan2 = sum(q2)
+            totalquan3 = sum(q3)
+
+            p1 = list(finalDf['price1'])[0:100]
+            p2 = list(finalDf['price2'])[0:100]
+            p3 = list(finalDf['price3'])[0:100]
+
+            p1 = [round(i,2) for i in p1]
+            p2 = [round(i,2) for i in p2]
+            p3 = [round(i,2) for i in p3]
+
+            totalprice1 = sum(p1)
+            totalprice2 = sum(p2)
+            totalprice3 = sum(p3)
+
+            totalprice1 = round(totalprice1,2)
+            totalprice2 = round(totalprice2,2)
+            totalprice3 = round(totalprice3,2)
+
+            sku = list(finalDf['sku'])[0:100]
+
+            zip1 = zip(p1,q1)
+            zip2 = zip(p2,q2)
+            zip3 = zip(p3,q3)
+
+            text = 'SKU Analysis'
+            heading = 'SKU' 
+
+            a1 = dateArr[0].date()
+            b1 = str(a1).split('-')
+            f1 = b1[-1]+"/"+b1[-2]+"/"+b1[0]
+
+            a2 = dateArr[1]
+            b2 = str(a2).split('-')
+            f2 = b2[-1]+"/"+b2[-2]+"/"+b2[0] 
+
+            a3 = dateArr[2]
+            b3 = str(a3).split('-')
+            f3 = b3[-1]+"/"+b3[-2]+"/"+b3[0]
+
+            a4 = dateArr[3]
+            b4 = str(a4).split('-')
+            f4 = b4[-1]+"/"+b4[-2]+"/"+b4[0] 
+
+
+            FinalTotalQuantity = totalquan1+totalquan2+totalquan3
+            FinalTotalSales = totalprice1+totalprice2+totalprice3
+
+            return render(request,'sales/nonmover.html',{
+                'show':True,
+                'text':text,'channel':channelName,'heading':heading,'dollar':'$',
+                'finalSales':FinalTotalSales,'finalquantity':FinalTotalQuantity,
+                'totalSale1':totalprice1,'totalSale2':totalprice2,'totalSale3':totalprice3,
+                'totalQuantity1':totalquan1,'totalQuantity2':totalquan2,'totalQuantity3':totalquan3,
+                'vendor' : sku,'lineTotal1':zip1,'lineTotal2':zip2,'lineTotal3':zip3,
+                'gv1':p1,'gv2':p2,'gv3':p3,
+                'date1':f1,'date2':f2,'date3':f3,'date4':f4
+            })
+            
 
 
 
     return render(request,'sales/nonmover.html')
-
-
 def non_mover_export(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename='+"Non Mover"+'.csv'
