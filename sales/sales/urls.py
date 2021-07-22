@@ -32,4 +32,5 @@ urlpatterns = [
     path('login/',views.login_view,name='login_view'),
     path('logout/',views.logout_view,name='logout_view'),
     path('non_mover/',views.non_mover,name='non_mover'),
+    path('non_mover_export/',views.non_mover_export,name='non_mover_export'),
     ]

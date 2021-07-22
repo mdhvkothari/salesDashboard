@@ -37,7 +37,7 @@
                 <b>Select Date : &nbsp;</b><input type="date" name="startdate" />
                 <label for="weekly"><b>Select Interval :&nbsp;</b> </label>
                 <select id="time" name="time">
-                  <option value="7">7</option>
+                  <option value="6">7</option>
                   <option value="14">14</option>
                   <option value="30">30</option>
                   <option value="60">60</option>
@@ -48,6 +48,8 @@
                   <option value="Wayfair">Wayfair</option>
                   <option value="Casagear">Casagear</option>
                   <option value="Casagear">Morecommerce</option>
+                  <option value="Overstock">Overstock</option>
+                  <option value="Manhattan Lane -Amazon SC">Manhattan Lane -Amazon SC</option>
                 </select>
                 <input type="submit" name="search">
             </form>
@@ -544,13 +546,27 @@
                       </div>
                   </div>
               </div>
-
+        
         {% endif %}
       {% else %}
       <div class="container">
-
+        
       </div>
       {% endif %}
     <br><br><br>
-    </div>
+    <center>
+      <div class="container">
+        <div class="row">
+          <div class='col-sm'>
+            <a href="/non_mover_export" <button class="btn btn-default btn-lg" 
+            type="button">
+            <strong>Export Complete Data</strong>
+          </button></a>
+          </div>
+        </div>
+      </div>
+    </center>
+    <br><br><br>  
+  </div>
+
     {% endblock %}

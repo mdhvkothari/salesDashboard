@@ -1947,13 +1947,21 @@ def opalTabExport(request):
     return response
 
 
+
+downloadnon_moverData = ""
+fileName_non_mover = "Data"
+
 def non_mover(request):
+
     if request.method == 'POST':
+
+        global downloadnon_moverData
+        global fileName_non_mover
         date = request.POST.get('startdate')
-        channel = request.POST.get('channelName')
+        channelName = request.POST.get('channelName')
         time = request.POST.get('time')
         from_date = datetime.strptime(date, '%Y-%m-%d')
-    
+        
         dateArr = []
         dateArr.append(from_date)
         for i in range(0,4):
@@ -1961,21 +1969,147 @@ def non_mover(request):
             dateArr.append(b.date())
             from_date = b
 
+        downloadnon_moverData = TotalOpalData.objects.filter(orderdate__range=(str(dateArr[3]),str(dateArr[0].date())))
+
         q1 = TotalOpalData.objects.filter(orderdate__range=(str(dateArr[1]),str(dateArr[0].date())))
         q2 = TotalOpalData.objects.filter(orderdate__range=(str(dateArr[2]),str(dateArr[1])))
         q3 = TotalOpalData.objects.filter(orderdate__range=(str(dateArr[3]),str(dateArr[2])))
 
-        nonmover = NonMover.objects.all()
+        nonmover_sku = list(NonMover.objects.values_list('sku',flat=True))
+
+        inter1 = q1.filter(itemname__in = nonmover_sku)
+        inter2 = q2.filter(itemname__in = nonmover_sku)
+        inter3 = q3.filter(itemname__in = nonmover_sku)
+
+        d1 = {}
+        d2 = {}
+        d3 = {}
+        for i in range(0,len(inter1)):
+            if inter1[i].customername in d1:
+                d1[inter1[i].customername] += inter1[i].quantity
+            else:
+                d1[inter1[i].customername] = 0
+        for i in range(0,len(inter2)):
+            if inter2[i].customername in d2:
+                d2[inter2[i].customername] += inter2[i].quantity
+            else:
+                d2[inter2[i].customername] = 0
+        for i in range(0,len(inter3)):
+            if inter3[i].customername in d3:
+                d3[inter3[i].customername] += inter3[i].quantity
+            else:
+                d3[inter3[i].customername] = 0
+
+        fd1 = {}
+        fd2 = {}
+        fd3 = {}
+        id1 = sorted(d1.items(), key=lambda item: item[1],reverse = True)
+        id2 = sorted(d2.items(), key=lambda item: item[1],reverse = True)
+        id3 = sorted(d3.items(), key=lambda item: item[1],reverse = True)
+
+        for i in range(0,len(id1)):
+            fd1[id1[i][0]] = id1[i][1]
+            
+        for i in range(0,len(id2)):
+            fd2[id2[i][0]] = id2[i][1]
         
-        test = TotalOpalData.objects.all().values_list('itemname').intersection(NonMover.objects.all().values_list('sku'))
+        for i in range(0,len(id3)):
+            fd3[id3[i][0]] = id3[i][1]
 
-        print(test)
+        # print(fd1)
+        # print(fd2)
+        # print(fd3)
+        sd1 = list(fd1.keys())
+        vd1 = list(fd1.values())
+
+        sd2 = list(fd2.keys())
+        vd2 = list(fd2.values())
+
+        sd3 = list(fd3.keys())
+        vd3 = list(fd3.values())
 
         
+    
+        df1 = {'channel':sd1,'quantity1':vd1}
+        df2 = {'channel':sd2,'quantity2':vd2}
+        df3 = {'channel':sd3,'quantity3':vd3}
+        df1 = pd.DataFrame(df1)
+        df2 = pd.DataFrame(df2)
+        df3 = pd.DataFrame(df3)  
+
+        
+        df = reduce(lambda x,y: pd.merge(x,y, on='channel', how='outer'), [df1, df2, df3])
+        df = df.replace(np.nan,0)
 
 
+        salesChannel = list(df['channel'])
+        vd1 = list(df['quantity1'])
+        vd2 = list(df['quantity2'])
+        vd3 = list(df['quantity3'])
 
 
-        return render(request,'sales/nonmover.html')
+       
+        totalQuantity1 = int(sum(vd1)) 
+        totalQuantity2 = int(sum(vd2))
+        totalQuantity3 = int(sum(vd3))
+
+
+        vd1 = list(map(int, vd1))
+        vd2 = list(map(int, vd2))
+        vd3 = list(map(int, vd3))
+        
+
+        a1 = dateArr[0].date()
+        b1 = str(a1).split('-')
+        f1 = b1[-1]+"/"+b1[-2]+"/"+b1[0]
+
+        a2 = dateArr[1]
+        b2 = str(a2).split('-')
+        f2 = b2[-1]+"/"+b2[-2]+"/"+b2[0] 
+
+        a3 = dateArr[2]
+        b3 = str(a3).split('-')
+        f3 = b3[-1]+"/"+b3[-2]+"/"+b3[0]
+
+        a4 = dateArr[3]
+        b4 = str(a4).split('-')
+        f4 = b4[-1]+"/"+b4[-2]+"/"+b4[0]
+
+        if channelName == 'None':
+            yes = True
+            text = "Quantity Analysis of Non Mover"
+            heading = "Channel"
+            return render(request,'sales/nonmover.html',{
+                'show':True,
+                'result':yes,'text':text,'heading':heading,
+                'total1':totalQuantity1,'total2':totalQuantity2,'total3':totalQuantity3,
+                'channel' : salesChannel,'q1':vd1,'q2':vd2,'q3':vd3,
+                'date1':f1,'date2':f2,'date3':f3,'date4':f4
+            })
+
+        # elif channelName!='None':
+
+
 
     return render(request,'sales/nonmover.html')
+
+
+def non_mover_export(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename='+"Non Mover"+'.csv'
+    writer = csv.writer(response)   
+    writer.writerow(['orderDate','orderId','customerReferenceNumber','invoiceNumber','itemName','quantity','price','amount','Customer Name','orderStatus','shippingCarrier','Vendor'])
+    for i in downloadnon_moverData:
+        writer.writerow([i.orderdate,i.orderid,i.customerreferencenumber,i.invoicenumber,i.itemname,i.quantity,i.price,i.amount,i.customername,i.orderstatus,i.shippingcarrier,i.vendor])
+    return response
+
+
+
+
+
+
+
+
+
+
+
