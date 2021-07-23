@@ -1976,6 +1976,10 @@ def non_mover(request):
         q3 = TotalOpalData.objects.filter(orderdate__range=(str(dateArr[3]),str(dateArr[2])))
 
         nonmover_sku = list(NonMover.objects.values_list('sku',flat=True))
+        
+        #for download the data
+        downloadnon_moverData = downloadnon_moverData.filter(itemname__in=nonmover_sku)
+
 
         inter1 = q1.filter(itemname__in = nonmover_sku)
         inter2 = q2.filter(itemname__in = nonmover_sku)
