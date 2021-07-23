@@ -1967,13 +1967,16 @@ def non_mover(request):
         for i in range(0,4):
             b = from_date - timedelta(days=int(time))
             dateArr.append(b.date())
-            from_date = b
+            c = b - timedelta(days=int(1))
+            dateArr.append(c.date())
+            from_date = c
+        print(dateArr)
 
-        downloadnon_moverData = TotalOpalData.objects.filter(orderdate__range=(str(dateArr[3]),str(dateArr[0].date())))
+        downloadnon_moverData = TotalOpalData.objects.filter(orderdate__range=(str(dateArr[5]),str(dateArr[0].date())))
 
         q1 = TotalOpalData.objects.filter(orderdate__range=(str(dateArr[1]),str(dateArr[0].date())))
-        q2 = TotalOpalData.objects.filter(orderdate__range=(str(dateArr[2]),str(dateArr[1])))
-        q3 = TotalOpalData.objects.filter(orderdate__range=(str(dateArr[3]),str(dateArr[2])))
+        q2 = TotalOpalData.objects.filter(orderdate__range=(str(dateArr[3]),str(dateArr[2])))
+        q3 = TotalOpalData.objects.filter(orderdate__range=(str(dateArr[5]),str(dateArr[4])))
 
         nonmover_sku = list(NonMover.objects.values_list('sku',flat=True))
         
@@ -1992,17 +1995,17 @@ def non_mover(request):
             if inter1[i].customername in d1:
                 d1[inter1[i].customername] += inter1[i].quantity
             else:
-                d1[inter1[i].customername] = 0
+                d1[inter1[i].customername] = inter1[i].quantity
         for i in range(0,len(inter2)):
             if inter2[i].customername in d2:
                 d2[inter2[i].customername] += inter2[i].quantity
             else:
-                d2[inter2[i].customername] = 0
+                d2[inter2[i].customername] = inter2[i].quantity
         for i in range(0,len(inter3)):
             if inter3[i].customername in d3:
                 d3[inter3[i].customername] += inter3[i].quantity
             else:
-                d3[inter3[i].customername] = 0
+                d3[inter3[i].customername] = inter3[i].quantity
 
         fd1 = {}
         fd2 = {}
@@ -2079,6 +2082,15 @@ def non_mover(request):
         b4 = str(a4).split('-')
         f4 = b4[-1]+"/"+b4[-2]+"/"+b4[0]
 
+        a5 = dateArr[4]
+        b5 = str(a5).split('-')
+        f5 = b5[-1]+"/"+b5[-2]+"/"+b5[0] 
+
+        a6 = dateArr[5]
+        b6 = str(a6).split('-')
+        f6 = b6[-1]+"/"+b6[-2]+"/"+b6[0] 
+        print(f1, f2, f3, f4, f5, f6)
+
         if channelName == 'None':
             yes = True
             text = "Quantity Analysis of Non Mover"
@@ -2088,7 +2100,7 @@ def non_mover(request):
                 'result':yes,'text':text,'heading':heading,
                 'total1':totalQuantity1,'total2':totalQuantity2,'total3':totalQuantity3,
                 'channel' : salesChannel,'q1':vd1,'q2':vd2,'q3':vd3,
-                'date1':f1,'date2':f2,'date3':f3,'date4':f4
+                'date1':f1,'date2':f2,'date3':f3,'date4':f4, 'date5':f5, 'date6':f6
             })
 
         elif channelName!='None':
@@ -2117,23 +2129,23 @@ def non_mover(request):
                     v1[finalResult1[i].itemname] += finalResult1[i].quantity
                     p1[finalResult1[i].itemname] += finalResult1[i].amount
                 else:
-                    v1[finalResult1[i].itemname] = 0
-                    p1[finalResult1[i].itemname] = 0
+                    v1[finalResult1[i].itemname] = finalResult1[i].quantity
+                    p1[finalResult1[i].itemname] = finalResult1[i].amount
 
             for i in range(0,len(finalResult2)):
                 if finalResult2[i].itemname in v2:
                     v2[finalResult2[i].itemname] += finalResult2[i].quantity
                     p2[finalResult2[i].itemname] += finalResult2[i].amount
                 else:
-                    v2[finalResult2[i].itemname] = 0
-                    p2[finalResult2[i].itemname] = 0
+                    v2[finalResult2[i].itemname] = finalResult2[i].quantity
+                    p2[finalResult2[i].itemname] = finalResult2[i].amount
             for i in range(0,len(finalResult3)):
                 if finalResult3[i].itemname in v3:
                     v3[finalResult3[i].itemname] += finalResult3[i].quantity
                     p3[finalResult3[i].itemname] += finalResult3[i].amount
                 else:
-                    v3[finalResult3[i].itemname] = 0
-                    p3[finalResult3[i].itemname] = 0
+                    v3[finalResult3[i].itemname] = finalResult3[i].quantity
+                    p3[finalResult3[i].itemname] = finalResult3[i].amount
 
             
 
@@ -2249,6 +2261,15 @@ def non_mover(request):
             b4 = str(a4).split('-')
             f4 = b4[-1]+"/"+b4[-2]+"/"+b4[0] 
 
+            a5 = dateArr[4]
+            b5 = str(a5).split('-')
+            f5 = b5[-1]+"/"+b5[-2]+"/"+b5[0] 
+
+            a6 = dateArr[5]
+            b6 = str(a6).split('-')
+            f6 = b6[-1]+"/"+b6[-2]+"/"+b6[0] 
+            print(f1, f2, f3, f4, f5, f6)
+
 
             FinalTotalQuantity = totalquan1+totalquan2+totalquan3
             FinalTotalSales = totalprice1+totalprice2+totalprice3
@@ -2261,7 +2282,7 @@ def non_mover(request):
                 'totalQuantity1':totalquan1,'totalQuantity2':totalquan2,'totalQuantity3':totalquan3,
                 'vendor' : sku,'lineTotal1':zip1,'lineTotal2':zip2,'lineTotal3':zip3,
                 'gv1':p1,'gv2':p2,'gv3':p3,
-                'date1':f1,'date2':f2,'date3':f3,'date4':f4
+                'date1':f1,'date2':f2,'date3':f3,'date4':f4,'date5':f5,'date6':f6
             })
             
 
