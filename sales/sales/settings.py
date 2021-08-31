@@ -82,7 +82,7 @@ DATABASES = {
         'NAME': 'sales_data',
         'USER':'admin',
         'PASSWORD':'admin2021',
-        'HOST':'database-1.c4eut80fjgga.us-east-2.rds.amazonaws.com',
+        'HOST':'sales-dashboard.crtwvnjrkz1o.ap-south-1.rds.amazonaws.com',
         'PORT':'3306',
     }
 }

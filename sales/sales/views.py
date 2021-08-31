@@ -11,6 +11,12 @@ from django.db.models import Sum
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout,login
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import json
+
+
+
 
 downloadData = ""
 fileName = "Data"
@@ -2299,7 +2305,35 @@ def non_mover_export(request):
     return response
 
 
+def importDashoard(request):
+    scope = ['https://spreadsheets.google.com/feeds',
+                 'https://www.googleapis.com/auth/drive']
+    
+    gc = gspread.service_account(filename='sales/forreordering-38e3f0bc72c3.json')
+    
+    wks = gc.open("RE-ORDER Sheet").sheet1
+    
+    data = wks.get_all_values()
+    headers = data.pop(0)
+    df = pd.DataFrame(data, columns=headers)
+    imagesLinks = []
+    for i in range(0,len(df['image'])):
+        if len(df['image'][i]) > 1:
+            link = df['image'][i].split('(')[-1]
+            imagesLinks.append(link.split(')')[0])
+        else:
+            imagesLinks.append("")
+    df['image'] = imagesLinks
+    
+    json_records = df.reset_index().to_json(orient ='records')
+    data = []
+    data = json.loads(json_records)
+    print(data)
+    context = {'d': data}
+  
 
+
+    return render(request,'sales/import.html',context)
 
 
 
